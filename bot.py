@@ -212,9 +212,13 @@ def mfwdr(m):
                 msgs = 0
                 if R.get(_hash):
                     msgs = int(R.get(_hash))
-                max_time = 5
-                if R.get("maxflood:{}".format(botuser)) :
-                    max_time = R.get("maxflood:{}".format(botuser))
+                    if R.get(_hash) :
+                        max_time = R.ttl(_hash)
+                    else:
+                         if R.get("maxflood:{}".format(botuser)) :
+                            max_time = R.get("maxflood:{}".format(botuser))
+                        else:
+                            max_time = 5
                 R.setex(_hash, max_time, int(msgs) + 1)
                 if m.chat.type == 'private' :
                     if R.sismember(bhash,m.chat.id) :
