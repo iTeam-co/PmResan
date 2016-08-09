@@ -130,7 +130,7 @@ def sendall(m):
 def fwdall(m):
     if m.chat.id == logchat :
         if m.reply_to_message:
-            mid = m.reply_to_message.id
+            mid = m.reply_to_message.message_id
             ids = R.smembers(mhash)
             for id in ids:
                 try:
