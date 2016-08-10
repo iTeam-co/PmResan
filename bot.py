@@ -45,8 +45,8 @@ def show_alert(m):
             text = m.text.replace('/setwait ','')
             R.set("wait:{}".format(str(botid)),text)
             bot.send_message(m.chat.id,"*Wait TexT Changed To :*\n{}".format(text),parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['setflood'])
 def sflood(m):
     try:
@@ -54,8 +54,8 @@ def sflood(m):
             text = m.text.replace('/setflood ','')
             R.set("maxmsgs:{}".format(botuser),int(text))
             bot.send_message(m.chat.id,"*Flood Messages Changed To {}*".format(text),parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['setfloodtime'])
 def sft(m):
     try:
@@ -63,40 +63,40 @@ def sft(m):
             text = m.text.replace('/setfloodtime ','')
             R.set("maxflood:{}".format(botuser),int(text))
             bot.send_message(m.chat.id,"*Flood Time Changed To {}*".format(text),parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['enableads'])
 def sads(m):
     try:
         if m.chat.id == logchat :
             R.set("ads:{}".format(botuser),True)
             bot.send_message(m.chat.id,"تبلیغات آی تیم در ربات شما فعال شد\nممنون که مارو حمایت میکنید")
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['disableads'])
 def sadsd(m):
     try:
         if m.chat.id == logchat :
             R.delete("ads:{}".format(botuser))
             bot.send_message(m.chat.id,"تبلیغات و حمایت شما از ما قطع شد :(")
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['setlog'])
 def setlog(m):
     try:
         if m.from_user.id == sudo :
             R.set("logchat:{}".format(botuser),m.chat.id)
             bot.send_message(m.chat.id,"*New Log Chat Set*\n`ID` : _{}_".format(m.chat.id),parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['dellog'])
 def remlog(m):
     try:
         if m.from_user.id == sudo :
             R.set("logchat:{}".format(botuser),sudo)
             bot.send_message(m.chat.id,"*Old Log Chat Deleted*",parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['start','help'])
 def start(m):
     try :
@@ -114,8 +114,8 @@ def start(m):
                 bot.send_message(m.chat.id,tex3,parse_mode='Markdown',reply_markup=markup)
             else:
                 bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
-    except :
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(commands=['sendall'])
 def sendall(m):
     if m.chat.id == logchat :
@@ -145,8 +145,8 @@ def unban(m):
                 id = m.text.replace("/unban ","")
                 R.srem(bhash,int(id))
                 bot.send_message(logchat,"Unbanned")
-            except :
-                print("Error")
+            except Exception as e:
+                print(e)
 @bot.message_handler(commands=['ban'])
 def unban(m):
     if not m.reply_to_message :
@@ -155,8 +155,8 @@ def unban(m):
                 id = m.text.replace("/ban ","")
                 R.sadd(bhash,int(id))
                 bot.send_message(logchat,"Banned")
-            except :
-                print("Error")
+            except Exception as e:
+                print(e)
 @bot.message_handler(commands=['msg'])
 def smsg(m):
     if not m.reply_to_message :
@@ -271,8 +271,8 @@ def mfwdr(m):
                     tex3 = "*Message Sent*"
                 bot.send_message(logchat,"Message Sent by {} - @{}".format(m.from_user.first_name,m.from_user.username))
                 bot.send_message(m.chat.id,text3,parse_mode='Markdown')
-    except:
-        print("Error")
+    except Exception as e:
+        print(e)
 @bot.message_handler(func=lambda message: True)
 def fwdr(m):
     try:
@@ -289,6 +289,6 @@ def fwdr(m):
             text2 = "Flood Is Not Allowed !\nYou're Banned"
             bot.send_message(logchat,text)
             bot.send_message(m.from_user.id,text2)
-    except :
-        print("Error for "+str(botid))
+    except Exception as e:
+        print(e)
 bot.polling(True)
