@@ -215,7 +215,7 @@ def mfwdr(m):
                     if R.get(_hash) :
                         max_time = R.ttl(_hash)
                     else:
-                         if R.get("maxflood:{}".format(botuser)) :
+                        if R.get("maxflood:{}".format(botuser)) :
                             max_time = R.get("maxflood:{}".format(botuser))
                         else:
                             max_time = 5
