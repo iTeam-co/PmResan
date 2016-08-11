@@ -278,7 +278,7 @@ def mfwdr(m):
                 else :
                     tex3 = "*Message Sent*"
                 bot.send_message(logchat,"Message Sent by {} - @{}".format(m.from_user.first_name,m.from_user.username))
-                bot.send_message(m.chat.id,text3,parse_mode='Markdown')
+                bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
     except Exception as e:
         print(e)
 @bot.message_handler(func=lambda message: True)
