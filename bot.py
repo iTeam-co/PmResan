@@ -142,9 +142,15 @@ def unban(m):
     if not m.reply_to_message :
         if m.chat.id == logchat :
             try :
-                id = m.text.replace("/unban ","")
-                R.srem(bhash,int(id))
-                bot.send_message(logchat,"Unbanned")
+                if m.reply_to_message:
+                    if m.reply_to_message.forward_from :
+                        user = m.reply_to_message.forward_from
+                        R.srem(bhash,user)
+                        bot.send_message(logchat,"Unbanned")
+                else:
+                    id = m.text.replace("/unban ","")
+                    R.srem(bhash,int(id))
+                    bot.send_message(logchat,"Unbanned")
             except Exception as e:
                 print(e)
 @bot.message_handler(commands=['ban'])
@@ -152,9 +158,15 @@ def unban(m):
     if not m.reply_to_message :
         if m.chat.id == logchat :
             try :
-                id = m.text.replace("/ban ","")
-                R.sadd(bhash,int(id))
-                bot.send_message(logchat,"Banned")
+                if m.reply_to_message:
+                    if m.reply_to_message.forward_from :
+                        user = m.reply_to_message.forward_from
+                        R.srem(bhash,user)
+                        bot.send_message(logchat,"Unbanned")
+                else:
+                    id = m.text.replace("/ban ","")
+                    R.sadd(bhash,int(id))
+                    bot.send_message(logchat,"Banned")
             except Exception as e:
                 print(e)
 @bot.message_handler(commands=['msg'])
@@ -174,51 +186,47 @@ def mfwdr(m):
     try:
         if m.text :
             if m.chat.id == logchat :
-                    if m.reply_to_message :
-                        text = m.text
-                        user = m.reply_to_message.forward_from.id
-                        if m.text == '/ban' :
-                            R.sadd(bhash,user)
-                            bot.send_message(logchat,"Banned")
-                        elif m.text == '/unban' :
-                            R.srem(bhash,user)
-                            bot.send_message(logchat,"Unbanned")
-                        else:
-                            bot.send_message(user,text)
-                            bot.send_message(m.chat.id,"Message Sent")
-                    elif not m.reply_to_message :
-                        if m.text == '/bans' :
-                            res = R.scard(bhash)
-                            tex = "Banned Users : {}".format(str(res))
-                            bot.send_message(logchat,tex)
-                        elif m.text == '/users' :
-                            res2 = R.scard(mhash)
-                            tex2 = "Bot Users : {}".format(str(res2))
-                            bot.send_message(logchat,tex2)
-                        elif m.text == '/showstart' :
-                            if R.get("welcome:{}".format(str(botid))) :
-                                tex3 = R.get("welcome:{}".format(str(botid)))
-                            else :
-                                tex3 = "*Welcome Dude ,*\n_I'll Forward Your Message To Bot Owner_"
-                                bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
-                        elif m.text == '/showwait' :
-                            if R.get("wait:{}".format(str(botid))) :
-                                tex3 = R.get("wait:{}".format(str(botid)))
-                            else :
-                                tex3 = "*Message Sent*"
-                                bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
+                if m.reply_to_message :
+                    text = m.text
+                    user = m.reply_to_message.forward_from.id
+                    if m.text == '/ban' :
+                        return None
+                    elif m.text == '/unban' :
+                        return None
+                    else:
+                        bot.send_message(user,text)
+                        bot.send_message(m.chat.id,"Message Sent")
+                elif not m.reply_to_message :
+                    if m.text == '/bans' :
+                        res = R.scard(bhash)
+                        tex = "Banned Users : {}".format(str(res))
+                        bot.send_message(logchat,tex)
+                    elif m.text == '/users' :
+                        res2 = R.scard(mhash)
+                        tex2 = "Bot Users : {}".format(str(res2))
+                        bot.send_message(logchat,tex2)
+                    elif m.text == '/showstart' :
+                        if R.get("welcome:{}".format(str(botid))) :
+                            tex3 = R.get("welcome:{}".format(str(botid)))
+                        else :
+                            tex3 = "*Welcome Dude ,*\n_I'll Forward Your Message To Bot Owner_"
+                            bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
+                    elif m.text == '/showwait' :
+                        if R.get("wait:{}".format(str(botid))) :
+                            tex3 = R.get("wait:{}".format(str(botid)))
+                        else :
+                            tex3 = "*Message Sent*"
+                            bot.send_message(m.chat.id,tex3,parse_mode='Markdown')
             elif not m.chat.id == logchat :
                 _hash = "anti_flood:{}:{}".format(botuser,m.from_user.id)
                 msgs = 0
+                max_time = 5
                 if R.get(_hash):
                     msgs = int(R.get(_hash))
-                if R.get(_hash) :
                     max_time = R.ttl(_hash)
                 else:
                     if R.get("maxflood:{}".format(botuser)) :
                         max_time = R.get("maxflood:{}".format(botuser))
-                    else:
-                        max_time = 5
                 R.setex(_hash, max_time, int(msgs) + 1)
                 if m.chat.type == 'private' :
                     if R.sismember(bhash,m.chat.id) :
